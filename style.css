@@ -1,30 +1,44 @@
-/* --- Navbar --- */
-nav {
-    width: 100%;
-    background: #1976D2;
-    padding: 12px 0 10px 0;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-}
-nav div {
-    text-align: center;
-}
-nav a {
-    color: #fff;
-    font-weight: bold;
-    font-size: 18px;
-    margin: 0 20px;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-nav a:hover {
-    color: #BBDEFB;
+/* Reset e stili globali */
+* { box-sizing: border-box; }
+
+body {
+    background: #FFE4B5;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* --- Titolo --- */
+/* Sfondo acqua in fondo alla pagina */
+.mare-striscia {
+    width: 100vw;
+    height: 160px;
+    background: linear-gradient(to top, #2196F3 0%, #81D4FA 100%);
+    margin: 0;
+    border-top-left-radius: 60px 40px;
+    border-top-right-radius: 60px 40px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 -4px 24px rgba(33,150,243,0.10);
+}
+
+.mare-striscia::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0; right: 0; top: 0; height: 30px;
+    background: url('data:image/svg+xml;utf8,<svg width="100%" height="30" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q 50 40 100 20 T 200 20 T 300 20 T 400 20 T 500 20 T 600 20 T 700 20 V30 H0Z" fill="%23b3e5fc"/></svg>') repeat-x;
+    opacity: 0.7;
+    z-index: 2;
+}
+
+/* Titolo principale */
 h2 {
     text-align: center;
-    margin: 20px 0 10px 0;
+    margin: 20px 0;
     color: #0D47A1;
     font-size: 2.2em;
     background: rgba(255,255,255,0.8);
@@ -32,7 +46,7 @@ h2 {
     border-radius: 12px;
 }
 
-/* --- Form di selezione data --- */
+/* Form di selezione data */
 #dateForm {
     text-align: center;
     margin: 20px auto;
@@ -45,7 +59,9 @@ h2 {
     transform: translateX(-50%);
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
+
 #dateForm label { font-weight: bold; color: #0D47A1; margin-right: 10px; font-size: 16px; }
+
 #dateForm input[type="date"] {
     padding: 8px 12px;
     border: 2px solid #1976D2;
@@ -54,6 +70,7 @@ h2 {
     margin: 0 10px;
     background: #E3F2FD;
 }
+
 #dateForm button {
     padding: 8px 18px;
     background: #1976D2;
@@ -66,11 +83,12 @@ h2 {
     margin: 0 5px;
     box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
 }
+
 #dateForm button:hover {
     background: #1565C0;
 }
 
-/* --- Container principale della spiaggia --- */
+/* Container principale della spiaggia */
 .piantina-container {
     position: relative;
     width: 1000px;
@@ -79,6 +97,26 @@ h2 {
     background: transparent;
 }
 
+/* Indicatore distanza dal mare */
+.piantina-container::before {
+    content: '↓ MARE ↓';
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: #0D47A1;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* Stili per le file con effetto prospettiva */
 .fila {
     display: flex;
     justify-content: center;
@@ -86,10 +124,14 @@ h2 {
     gap: 40px;
     margin-bottom: 40px;
 }
+
+/* File più vicine al mare sono più grandi */
 .fila-1 { transform: scale(1.12); }
 .fila-2 { transform: scale(1.08); }
 .fila-3 { transform: scale(1.04); }
 .fila-4 { transform: scale(1); }
+
+/* Etichette delle file con distanza dal mare */
 .fila::before {
     content: attr(data-fila);
     position: absolute;
@@ -104,11 +146,13 @@ h2 {
     font-size: 15px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
+
 .fila-4::before { content: "4° fila"; }
 .fila-3::before { content: "3° fila"; }
 .fila-2::before { content: "2° fila"; }
 .fila-1::before { content: "1° fila"; }
 
+/* Ombrellone container */
 .ombrellone {
     position: relative;
     width: 110px;
@@ -116,12 +160,14 @@ h2 {
     cursor: pointer;
     transition: all 0.2s;
     filter: drop-shadow(0 6px 12px rgba(0,0,0,0.13));
-    z-index: 1;
+    z-index: 1; /* <-- AGGIUNTO */
 }
+
 .ombrellone:hover {
     transform: translateY(-8px) scale(1.08);
-    z-index: 10000;
+    z-index: 9999; /* <-- PIÙ ALTO */
 }
+/* Parte superiore dell'ombrellone (telo) */
 .ombrellone::before {
     content: '';
     position: absolute;
@@ -134,12 +180,18 @@ h2 {
     z-index: 2;
     border: 2px solid #fff;
 }
+
+/* Colore per ombrelloni liberi */
 .ombrellone.libero::before {
     background: linear-gradient(135deg, #4CAF50 60%, #81C784 100%);
 }
+
+/* Colore per ombrelloni prenotati */
 .ombrellone.prenotato::before {
     background: linear-gradient(135deg, #F44336 60%, #FF7961 100%);
 }
+
+/* Decorazione aggiuntiva ombrellone */
 .ombrellone::after {
     content: '';
     position: absolute;
@@ -152,6 +204,8 @@ h2 {
     border-radius: 0 0 3px 3px;
     z-index: 1;
 }
+
+/* Numero ombrellone */
 .ombrellone-numero {
     position: absolute;
     top: 13px;
@@ -168,16 +222,17 @@ h2 {
     letter-spacing: 1px;
 }
 
+/* Tooltip migliorato */
 .tooltip {
     display: none;
-    position: absolute;
+    position:relative;
     top: 120px;
     left: 50%;
     transform: translateX(-50%);
     background: #fff;
     border: 2px solid #1976D2;
     padding: 14px;
-    z-index: 20000;
+    z-index: 99999999;
     min-width: 200px;
     border-radius: 10px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.13);
@@ -186,6 +241,7 @@ h2 {
     font-size: 14px;
     line-height: 1.6;
 }
+
 .tooltip::before {
     content: '';
     position: absolute;
@@ -198,33 +254,183 @@ h2 {
     border-right: 12px solid transparent;
     border-bottom: 12px solid #1976D2;
 }
+
 .tooltip strong { color: #1976D2; font-size: 16px; }
+
 .ombrellone:hover .tooltip { display: block; }
 
-/* --- Mare in fondo alla pagina --- */
+/* Mare - Striscia fissa in basso con onde */
 .mare-striscia {
+    left: 0;
+    bottom: 0;
     width: 100vw;
-    height: 160px;
-    background: linear-gradient(to top, #2196F3 0%, #81D4FA 100%);
-    margin: 0;
-    border-top-left-radius: 60px 40px;
-    border-top-right-radius: 60px 40px;
+    height: 150px;
+    background: linear-gradient(to top, 
+        #0D47A1 0%, 
+        #1565C0 30%, 
+        #1976D2 60%, 
+        #42A5F5 100%
+    );
+    z-index: 100;
     overflow: hidden;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 -4px 24px rgba(33,150,243,0.10);
-}
-.mare-striscia::before {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 0; right: 0; top: 0; height: 30px;
-    background: url('data:image/svg+xml;utf8,<svg width="100%" height="30" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q 50 40 100 20 T 200 20 T 300 20 T 400 20 T 500 20 T 600 20 T 700 20 V30 H0Z" fill="%23b3e5fc"/></svg>') repeat-x;
-    opacity: 0.7;
-    z-index: 2;
 }
 
-/* --- Responsive --- */
+/* Onde animate */
+.mare-striscia::before,
+.mare-striscia::after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%23ffffff" opacity="0.25"/></svg>') repeat-x;
+    animation: wave 10s linear infinite;
+}
+
+.mare-striscia::after {
+    top: 20px;
+    animation: wave 15s linear infinite reverse;
+    opacity: 0.5;
+}
+
+@keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Schiuma del mare */
+.mare-striscia::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 60"><path d="M0,20 Q100,0 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20 V60 H0 Z" fill="%23ffffff" opacity="0.3"/></svg>') repeat-x;
+    animation: foam 8s linear infinite;
+}
+
+@keyframes foam {
+    0% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(-100px) translateY(-5px); }
+    100% { transform: translateX(0) translateY(0); }
+}
+
+/* Form box per modifica ombrellone */
+.form-box {
+    max-width: 550px;
+    margin: 40px auto;
+    padding: 35px;
+    background: linear-gradient(135deg, #ffffff, #E3F2FD);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    border: 3px solid #1976D2;
+}
+
+.form-box h2 {
+    color: #0D47A1;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2em;
+    text-shadow: none;
+    background: none;
+    transform: none;
+}
+
+.form-box p {
+    background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    line-height: 1.8;
+    border-left: 5px solid #1976D2;
+}
+
+.form-box label {
+    display: block;
+    margin-top: 25px;
+    color: #0D47A1;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-box input,
+.form-box select {
+    width: 100%;
+    padding: 14px 18px;
+    margin-top: 10px;
+    border: 3px solid #90CAF9;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s;
+    background: #F5F5F5;
+}
+
+.form-box input:focus,
+.form-box select:focus {
+    outline: none;
+    border-color: #1976D2;
+    background: #FFF;
+    box-shadow: 0 0 0 5px rgba(25, 118, 210, 0.15);
+}
+
+/* Pulsanti */
+.btn {
+    margin-top: 30px;
+    padding: 16px 35px;
+    background: linear-gradient(135deg, #1976D2, #0D47A1);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    width: 100%;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 5px 20px rgba(25, 118, 210, 0.4);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(25, 118, 210, 0.6);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Messaggio di conferma */
+.msg {
+    color: #1B5E20;
+    font-weight: 700;
+    text-align: center;
+    padding: 15px 25px;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
+    border-radius: 10px;
+    border-left: 5px solid #4CAF50;
+    box-shadow: 0 3px 10px rgba(76, 175, 80, 0.2);
+}
+
+/* Link */
+a {
+    color: #0D47A1;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+a:hover {
+    color: #1976D2;
+    text-decoration: underline;
+}
+
+/* Responsive design */
 @media (max-width: 1024px) {
     .piantina-container { width: 98vw; padding: 10px; }
     .fila { gap: 18px; }

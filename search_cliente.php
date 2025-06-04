@@ -2,11 +2,12 @@
 // search_cliente.php
 $conn = new mysqli('localhost', 'root', '', 'spiaggia');
 if ($conn->connect_error) die();
+
 $nome = isset($_GET['nome']) ? $conn->real_escape_string($_GET['nome']) : '';
 $cognome = isset($_GET['cognome']) ? $conn->real_escape_string($_GET['cognome']) : '';
 $where = [];
-if ($nome) $where[] = "nome LIKE '".$nome."%'";
-if ($cognome) $where[] = "cognome LIKE '".$cognome."%'";
+if ($nome) $where[] = "nome LIKE '%".$nome."%'";
+if ($cognome) $where[] = "cognome LIKE '%".$cognome."%'";
 $sql = "SELECT * FROM clienti";
 if ($where) $sql .= " WHERE ".implode(' AND ', $where);
 $sql .= " ORDER BY cognome, nome LIMIT 10";
