@@ -18,19 +18,32 @@ $sql2 = "SELECT p.*, c.nome, c.cognome, c.cellulare, c.email, c.note FROM prenot
 $res2 = $conn->query($sql2);
 $prenotazione = $res2->fetch_assoc();
 
-// Recupera tutti i clienti per la select
-$clienti = [];
-$res3 = $conn->query("SELECT * FROM clienti ORDER BY cognome, nome");
-while ($row = $res3->fetch_assoc()) {
-    $clienti[] = $row;
-}
-
 // Gestione inserimento/modifica prenotazione
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_cliente = intval($_POST['id_cliente']);
+    $nome = trim($_POST['nome']);
+    $cognome = trim($_POST['cognome']);
+    $cellulare = trim($_POST['cellulare']);
+    $email = trim($_POST['email']);
+    $note = trim($_POST['note']);
     $data_inizio = $_POST['data_inizio'];
     $data_fine = $_POST['data_fine'];
+
+    // Cerca cliente esistente
+    $sql_cli = "SELECT * FROM clienti WHERE nome = '".$conn->real_escape_string($nome)."' AND cognome = '".$conn->real_escape_string($cognome)."' LIMIT 1";
+    $res_cli = $conn->query($sql_cli);
+    if ($res_cli && $res_cli->num_rows > 0) {
+        $cli = $res_cli->fetch_assoc();
+        $id_cliente = $cli['id_cliente'];
+        // Aggiorna dati se diversi
+        $sql_upd = "UPDATE clienti SET cellulare='$cellulare', email='$email', note='$note' WHERE id_cliente=$id_cliente";
+        $conn->query($sql_upd);
+    } else {
+        // Inserisci nuovo cliente
+        $sql_ins = "INSERT INTO clienti (nome, cognome, cellulare, email, note) VALUES ('".$conn->real_escape_string($nome)."', '".$conn->real_escape_string($cognome)."', '".$conn->real_escape_string($cellulare)."', '".$conn->real_escape_string($email)."', '".$conn->real_escape_string($note)."')";
+        $conn->query($sql_ins);
+        $id_cliente = $conn->insert_id;
+    }
     if ($prenotazione) {
         // Modifica prenotazione esistente
         $sql_upd = "UPDATE prenotazioni SET id_cliente=$id_cliente, data_inizio='$data_inizio', data_fine='$data_fine' WHERE id_prenotazioni=" . $prenotazione['id_prenotazioni'];
@@ -42,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->query($sql_ins);
         $msg = 'Prenotazione inserita!';
     }
-    // Ricarica dati aggiornati
     header("Location: modifica_ombrellone.php?id=$id_ombrellone&data=$data&msg=" . urlencode($msg));
     exit;
 }
@@ -54,8 +66,28 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
     <meta charset="UTF-8">
     <title>Modifica Ombrellone</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
-
+        .autocomplete-box { position: relative; }
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid #1976D2;
+            z-index: 10000;
+            max-height: 180px;
+            overflow-y: auto;
+            border-radius: 0 0 8px 8px;
+        }
+        .autocomplete-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .autocomplete-item:hover {
+            background: #E3F2FD;
+        }
     </style>
 </head>
 <body>
@@ -71,14 +103,22 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
         <?php else: ?>
             <p><strong>Ombrellone libero per questa data.</strong></p>
         <?php endif; ?>
-        <form method="post">
-            <label>Cliente:
-                <select name="id_cliente" required>
-                    <option value="">Seleziona cliente</option>
-                    <?php foreach ($clienti as $cli): ?>
-                        <option value="<?php echo $cli['id_cliente']; ?>" <?php if ($prenotazione && $cli['id_cliente'] == $prenotazione['id_cliente']) echo 'selected'; ?>><?php echo htmlspecialchars($cli['cognome'] . ' ' . $cli['nome']); ?></option>
-                    <?php endforeach; ?>
-                </select>
+        <form method="post" autocomplete="off">
+            <div class="autocomplete-box">
+                <label>Nome cliente:</label>
+                <input type="text" name="nome" id="nome" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['nome']) : ''; ?>" required>
+                <label>Cognome cliente:</label>
+                <input type="text" name="cognome" id="cognome" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['cognome']) : ''; ?>" required>
+                <div id="autocomplete-list" class="autocomplete-list" style="display:none;"></div>
+            </div>
+            <label>Cellulare:
+                <input type="text" name="cellulare" id="cellulare" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['cellulare']) : ''; ?>">
+            </label>
+            <label>Email:
+                <input type="email" name="email" id="email" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['email']) : ''; ?>">
+            </label>
+            <label>Note:
+                <input type="text" name="note" id="note" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['note']) : ''; ?>">
             </label>
             <label>Data inizio:
                 <input type="date" name="data_inizio" value="<?php echo $prenotazione ? $prenotazione['data_inizio'] : $data; ?>" required>
@@ -90,5 +130,44 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
         </form>
         <p><a href="piantina_ombrelloni.php?data=<?php echo urlencode($data); ?>">&larr; Torna alla piantina</a></p>
     </div>
+    <script>
+    $(function(){
+        function searchClient() {
+            var nome = $("#nome").val();
+            var cognome = $("#cognome").val();
+            if(nome.length < 1 && cognome.length < 1) { $("#autocomplete-list").hide(); return; }
+            $.get('search_cliente.php', { nome: nome, cognome: cognome }, function(data) {
+                if(data && data.length > 0) {
+                    var list = JSON.parse(data);
+                    if(list.length > 0) {
+                        var html = '';
+                        list.forEach(function(cli) {
+                            html += '<div class="autocomplete-item" data-nome="'+cli.nome+'" data-cognome="'+cli.cognome+'" data-cellulare="'+cli.cellulare+'" data-email="'+cli.email+'" data-note="'+cli.note+'">'+cli.nome+' '+cli.cognome+'</div>';
+                        });
+                        $("#autocomplete-list").html(html).show();
+                    } else {
+                        $("#autocomplete-list").hide();
+                    }
+                } else {
+                    $("#autocomplete-list").hide();
+                }
+            });
+        }
+        $("#nome, #cognome").on('input', searchClient);
+        $(document).on('click', '.autocomplete-item', function(){
+            $("#nome").val($(this).data('nome'));
+            $("#cognome").val($(this).data('cognome'));
+            $("#cellulare").val($(this).data('cellulare'));
+            $("#email").val($(this).data('email'));
+            $("#note").val($(this).data('note'));
+            $("#autocomplete-list").hide();
+        });
+        $(document).click(function(e){
+            if(!$(e.target).closest('.autocomplete-box').length) {
+                $("#autocomplete-list").hide();
+            }
+        });
+    });
+    </script>
 </body>
 </html>
