@@ -60,7 +60,7 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
 </head>
 <body>
     <div class="form-box">
-        <h2>Ombrellone n°<?php echo $ombrellone['n_ombrellone']; ?> (<?php echo $ombrellone['fila']; ?> fila)</h2>
+        <h2>Ombrellone n°<?php echo $ombrellone['id_ombrellone']; ?> (<?php echo $ombrellone['fila']; ?> fila)</h2>
         <?php if ($msg): ?><div class="msg"><?php echo htmlspecialchars($msg); ?></div><?php endif; ?>
         <?php if ($prenotazione): ?>
             <p><strong>Prenotato da:</strong> <?php echo htmlspecialchars($prenotazione['nome'] . ' ' . $prenotazione['cognome']); ?><br>

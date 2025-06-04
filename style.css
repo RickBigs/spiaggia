@@ -1,107 +1,439 @@
-/* Stili per la piantina degli ombrelloni */
+/* Reset e stili globali */
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background: linear-gradient(to top, #aee9f7 0 180px, #ffe4b5 180px 100%);
+    background-color: linear-gradient(to bottom, 
+        #FFE4B5 40%,      /* sabbia */
+        #FFE4B5 60%,     /* sabbia */
+        #FFE4B5 80%,     /* Sabbia */
+        #F4E4C1 100%,     /* Sabbia più scura */
+    );
     min-height: 100vh;
     margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
 }
 
+/* Titolo principale */
 h2 {
     text-align: center;
-    margin-top: 30px;
-    color: #1a237e;
+    margin: 20px 0;
+    color: #1565C0;
+    font-size: 2.2em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Form di selezione data */
+form {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    display: inline-block;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+form label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+form input[type="date"] {
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+form button {
+    padding: 8px 20px;
+    background: #1976D2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    margin: 0 5px;
+}
+
+form button:hover {
+    background: #1565C0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Container principale della spiaggia */
 .piantina-container {
     position: relative;
-    width: 700px;
-    margin: 40px auto 0 auto;
-    height: 350px;
+    width: 900px;
+    margin: 40px auto;
+    padding: 40px;
     background: transparent;
-    border-radius: 30px 30px 0 0;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-    overflow: visible;
 }
 
+/* Stili per le file */
 .fila {
-    position: absolute;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-.fila-4 { top: 30px; }
-.fila-3 { top: 90px; }
-.fila-2 { top: 170px; }
-.fila-1 { top: 250px; }
-
-.ombrellone {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.1em;
-    cursor: pointer;
     position: relative;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    border: 3px solid #fffbe6;
-    transition: transform 0.15s;
+    margin-bottom: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
 }
-.ombrellone:hover {
-    transform: scale(1.08) rotate(-2deg);
+
+/* Etichette delle file */
+.fila::before {
+    content: attr(data-fila) "° fila";
+    position: absolute;
+    left: -80px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #555;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.fila-4::before { content: "4° fila"; }
+.fila-3::before { content: "3° fila"; }
+.fila-2::before { content: "2° fila"; }
+.fila-1::before { content: "1° fila"; }
+
+/* Ombrellone container */
+.ombrellone {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.ombrellone-numero {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.95);
+    padding: 7px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 22px;
+    color: #1976D2;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.13);
+    border: 2px solid #1976D2;
+    letter-spacing: 1px;
+    pointer-events: none;
+}
+
+/* Parte superiore dell'ombrellone (telo) */
+.ombrellone::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 50px;
+    border-radius: 50px 50px 0 0;
+    background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 8px,
+        rgba(255, 255, 255, 0.4) 8px,
+        rgba(255, 255, 255, 0.4) 16px
+    );
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
     z-index: 2;
 }
-.libero {
-    background: radial-gradient(circle at 60% 40%, #4caf50 70%, #388e3c 100%);
-    color: #fff;
+
+/* Colore base per ombrelloni liberi */
+.ombrellone.libero::before {
+    background: 
+        repeating-linear-gradient(
+            -45deg,
+            #4CAF50,
+            #4CAF50 8px,
+            #81C784 8px,
+            #81C784 16px
+        ),
+        #4CAF50;
 }
-.prenotato {
-    background: radial-gradient(circle at 60% 40%, #e53935 70%, #b71c1c 100%);
-    color: #fff;
+
+/* Colore base per ombrelloni prenotati */
+.ombrellone.prenotato::before {
+    background: 
+        repeating-linear-gradient(
+            -45deg,
+            #F44336,
+            #F44336 8px,
+            #EF5350 8px,
+            #EF5350 16px
+        ),
+        #F44336;
 }
+
+/* Palo dell'ombrellone */
+.ombrellone::after {
+    content: '';
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 50px;
+    background: linear-gradient(to right, #8B4513, #A0522D);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Numero ombrellone */
+.ombrellone > div:first-child {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Testo fila (small) */
+.ombrellone small {
+    display: none; /* Nascondo perché uso ::before sulle file */
+}
+
+/* Tooltip migliorato */
 .tooltip {
     display: none;
     position: absolute;
-    top: 80px;
+    top: 110px;
     left: 50%;
     transform: translateX(-50%);
-    background: #fffbe6;
-    border: 1px solid #bdb76b;
-    padding: 10px;
-    z-index: 10;
-    min-width: 180px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+    border: 2px solid #1976D2;
+    padding: 15px;
+    z-index: 100;
+    min-width: 220px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
     color: #333;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.6;
 }
-.ombrellone:hover .tooltip { display: block; }
 
-/* Mare in basso */
-.mare {
-    position: top;
-    left: 0;
-    bottom: -60px;
+.tooltip::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid #1976D2;
+}
+
+.tooltip strong {
+    color: #1976D2;
+    font-size: 16px;
+}
+
+.ombrellone:hover .tooltip {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Form box per modifica ombrellone */
+.form-box {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.form-box h2 {
+    color: #1976D2;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.8em;
+}
+
+.form-box p {
+    background: #E3F2FD;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.form-box label {
+    display: block;
+    margin-top: 20px;
+    color: #555;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-box input,
+.form-box select {
     width: 100%;
-    height: 100px;
-    background: linear-gradient(to top, #2196f3 60%, #81d4fa 100%);
-    border-radius: 0 0 40px 40px;
-    box-shadow: 0 -2px 16px rgba(33,150,243,0.15);
+    padding: 12px 15px;
+    margin-top: 8px;
+    border: 2px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s;
+    background: #FAFAFA;
+}
+
+.form-box input:focus,
+.form-box select:focus {
+    outline: none;
+    border-color: #1976D2;
+    background: #FFF;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+/* Pulsanti */
+.btn {
+    margin-top: 25px;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Messaggio di conferma */
+.msg {
+    color: #2E7D32;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    background: #C8E6C9;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+
+/* Link */
+a {
+    color: #1976D2;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #1565C0;
+    text-decoration: underline;
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes waves {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes waveMotion {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Mare - Striscia fissa in basso */
+.mare-striscia {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 120px;
+    background: linear-gradient(to top, #2196F3 80%, #81D4FA 100%);
+    z-index: 100;
+    box-shadow: 0 -4px 24px rgba(33,150,243,0.18);
+    border-top-left-radius: 60px 40px;
+    border-top-right-radius: 60px 40px;
     overflow: hidden;
 }
-.mare::before {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 0; right: 0; top: 0; height: 30px;
-    background: url('data:image/svg+xml;utf8,<svg width="100%" height="30" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q 50 40 100 20 T 200 20 T 300 20 T 400 20 T 500 20 T 600 20 T 700 20 V30 H0Z" fill="%23b3e5fc"/></svg>') repeat-x;
-    opacity: 0.7;
-}
 
-@media (max-width: 800px) {
-    .piantina-container { width: 98vw; }
-    .ombrellone { width: 50px; height: 50px; font-size: 0.9em; }
+
+/* Responsive design */
+@media (max-width: 980px) {
+    .piantina-container {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .fila {
+        gap: 20px;
+    }
+    
+    .ombrellone {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .ombrellone::before {
+        width: 70px;
+        height: 35px;
+    }
+    
+    .ombrellone::after {
+        height: 35px;
+        top: 32px;
+    }
+    
+    .fila::before {
+        left: -60px;
+        font-size: 14px;
+    }
 }

@@ -9,11 +9,11 @@ if ($conn->connect_error) {
 $data = isset($_GET['data']) ? $_GET['data'] : date('Y-m-d');
 
 // Recupera lo stato degli ombrelloni per la data selezionata
-$sql = "SELECT o.id_ombrellone, o.n_ombrellone, o.fila, o.tipologia, p.id_prenotazioni, c.nome, c.cognome, p.data_inizio, p.data_fine
+$sql = "SELECT o.id_ombrellone, o.fila, o.tipologia, p.id_prenotazioni, c.nome, c.cognome, p.data_inizio, p.data_fine
         FROM ombrelloni o
         LEFT JOIN prenotazioni p ON o.id_ombrellone = p.id_ombrellone AND p.data_inizio <= '$data' AND p.data_fine >= '$data'
         LEFT JOIN clienti c ON p.id_cliente = c.id_cliente
-        ORDER BY o.n_ombrellone ASC";
+        ORDER BY o.id_ombrellone ASC";
 $result = $conn->query($sql);
 
 $ombrelloni = [];
@@ -31,19 +31,12 @@ while ($row = $result->fetch_assoc()) {
 <body>
     <h2>Piantina Ombrelloni - Data: <?php echo htmlspecialchars($data); ?></h2>
 
-<form method="get">
-<label>Seleziona data:</label> 
-<input style="width: 120px"type="date" name="data" value="<?php echo htmlspecialchars($data); ?>"></label>
+    <form method="get" id="dateForm">
+    <label>Seleziona data:</label> 
+    <input style="width: 150px" type="date" name="data" id="dataInput" value="<?php echo htmlspecialchars($data); ?>">
     <button type="submit">Cerca</button>
-    
-        <form method="get" style="display: inline;">
-            <input type="hidden" name="data" value="<?php echo date('Y-m-d', strtotime($data.' -1 day')); ?>">
-            <button type="submit">← Giorno precedente</button>
-        </form>
-        <form method="get" style="display: inline;">
-            <input type="hidden" name="data" value="<?php echo date('Y-m-d', strtotime($data.' +1 day')); ?>">
-            <button type="submit">Giorno successivo →</button>
-        </form>      
+    <button type="button" onclick="cambiaGiorno(-1)">← Giorno precedente</button>
+    <button type="button" onclick="cambiaGiorno(1)">Giorno successivo →</button>
 </form>
 
     <div class="piantina-container">
@@ -53,7 +46,7 @@ while ($row = $result->fetch_assoc()) {
                 $class = $prenotato ? 'prenotato' : 'libero';
             ?>
             <div class="ombrellone <?php echo $class; ?>" onclick="modificaOmbrellone(<?php echo $omb['id_ombrellone']; ?>)">
-                <?php echo $omb['n_ombrellone']; ?><br><small><?php echo $omb['fila']; ?></small>
+                <div class="ombrellone-numero"><?php echo $omb['id_ombrellone']; ?></div>
                 <?php if ($prenotato): ?>
                     <div class="tooltip">
                         Prenotato da:<br>
@@ -71,7 +64,7 @@ while ($row = $result->fetch_assoc()) {
                 $class = $prenotato ? 'prenotato' : 'libero';
             ?>
             <div class="ombrellone <?php echo $class; ?>" onclick="modificaOmbrellone(<?php echo $omb['id_ombrellone']; ?>)">
-                <?php echo $omb['n_ombrellone']; ?><br><small><?php echo $omb['fila']; ?></small>
+                <div class="ombrellone-numero"><?php echo $omb['id_ombrellone']; ?></div>
                 <?php if ($prenotato): ?>
                     <div class="tooltip">
                         Prenotato da:<br>
@@ -89,7 +82,7 @@ while ($row = $result->fetch_assoc()) {
                 $class = $prenotato ? 'prenotato' : 'libero';
             ?>
             <div class="ombrellone <?php echo $class; ?>" onclick="modificaOmbrellone(<?php echo $omb['id_ombrellone']; ?>)">
-                <?php echo $omb['n_ombrellone']; ?><br><small><?php echo $omb['fila']; ?></small>
+                <div class="ombrellone-numero"><?php echo $omb['id_ombrellone']; ?></div>
                 <?php if ($prenotato): ?>
                     <div class="tooltip">
                         Prenotato da:<br>
@@ -107,7 +100,7 @@ while ($row = $result->fetch_assoc()) {
                 $class = $prenotato ? 'prenotato' : 'libero';
             ?>
             <div class="ombrellone <?php echo $class; ?>" onclick="modificaOmbrellone(<?php echo $omb['id_ombrellone']; ?>)">
-                <?php echo $omb['n_ombrellone']; ?><br><small><?php echo $omb['fila']; ?></small>
+                <div class="ombrellone-numero"><?php echo $omb['id_ombrellone']; ?></div>
                 <?php if ($prenotato): ?>
                     <div class="tooltip">
                         Prenotato da:<br>
@@ -121,10 +114,24 @@ while ($row = $result->fetch_assoc()) {
         </div>
         <div class="mare"></div>
     </div>
-    <script>
-        function modificaOmbrellone(id) {
-            window.location.href = 'modifica_ombrellone.php?id=' + id + '&data=<?php echo urlencode($data); ?>';
-        }
-    </script>
+<script>
+
+function cambiaGiorno(giorni) {
+    var input = document.getElementById('dataInput');
+    var data = new Date(input.value);
+    data.setDate(data.getDate() + giorni);
+    input.value = data.toISOString().split('T')[0];
+    document.getElementById('dateForm').submit();
+}
+function modificaOmbrellone(id) {
+    window.location.href = 'modifica_ombrellone.php?id=' + id + '&data=<?php echo urlencode($data); ?>';
+}
+
+</script>
+
+<footer>
+    
+</footer>
+<div class="mare-striscia"></div>
 </body>
 </html>
