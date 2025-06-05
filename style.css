@@ -440,3 +440,118 @@ a:hover {
     .ombrellone-numero { font-size: 15px; padding: 4px 10px; }
     .fila::before { left: -60px; font-size: 12px; }
 }
+
+.autocomplete-box.selected {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
+.form-box input:focus {
+    transform: scale(1.02);
+}
+
+.autocomplete-box { position: relative; }
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.98);
+    border: 2px solid #1976D2;
+    z-index: 10000;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 0 0 12px 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.autocomplete-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #E3F2FD;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+.autocomplete-item:hover {
+    background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+    transform: translateX(5px);
+}
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+.autocomplete-item strong {
+    color: #1976D2;
+    font-weight: bold;
+}
+.autocomplete-item small {
+    color: #666;
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+.search-indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 14px;
+    color: #1976D2;
+    font-weight: bold;
+}
+.error-msg {
+    background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+    border: 2px solid #F44336;
+    color: #C62828;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+.btn-danger {
+    background: linear-gradient(135deg, #F44336, #D32F2F);
+    margin: 30px auto 0 auto;
+    display: block;
+    width: fit-content;
+    text-align: center;
+}
+.btn-danger:hover {
+    background: linear-gradient(135deg, #D32F2F, #B71C1C);
+}
+.prenotazione-info {
+    background: linear-gradient(135deg, #E8F5E8, #C8E6C9);
+    border: 2px solid #4CAF50;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+.prenotazione-info h3 {
+    margin: 0 0 15px 0;
+    color: #2E7D32;
+    font-size: 1.3em;
+}
+.cliente-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 14px;
+}
+.cliente-details span {
+    background: rgba(255,255,255,0.7);
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+.loading-spinner {
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #E3F2FD;
+    border-top: 2px solid #1976D2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

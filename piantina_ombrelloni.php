@@ -1,6 +1,6 @@
 <?php
 // connessione al database
-$conn = new mysqli('localhost', 'root', '', 'spiaggia'); // Sostituisci nome_database
+$conn = new mysqli('localhost', 'root', '', 'spiaggia'); 
 if ($conn->connect_error) {
     die('Connessione fallita: ' . $conn->connect_error);
 }
@@ -23,7 +23,7 @@ while ($row = $result->fetch_assoc()) {
 ?>
 <!DOCTYPE html>
 <html lang="it">
-<head>
+<\>
     <meta charset="UTF-8">
     <title>Piantina Ombrelloni</title>
     <link rel="stylesheet" href="style.css">
@@ -31,6 +31,7 @@ while ($row = $result->fetch_assoc()) {
         <div style="text-align:center;">
             <a href="piantina_ombrelloni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Piantina Ombrelloni</a>
             <a href="elenco_prenotazioni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Elenco Prenotazioni</a>
+            <a href="calendario.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Calendario</a>
         </div>
     </nav>
 </head>
