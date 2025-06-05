@@ -44,13 +44,7 @@ $ombrelloni_list = $conn->query("SELECT id_ombrellone FROM ombrelloni ORDER BY i
     <meta charset="UTF-8">
     <title>Elenco Prenotazioni</title>
     <link rel="stylesheet" href="style.css">
-    <nav style="width:100%;background:#1976D2;padding:12px 0 10px 0;margin-bottom:30px;">
-        <div style="text-align:center;">
-            <a href="piantina_ombrelloni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Piantina Ombrelloni</a>
-            <a href="elenco_prenotazioni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Elenco Prenotazioni</a>
-            <a href="calendario.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Calendario</a>
-        </div>
-    </nav>
+    <?php include 'header.php'; ?>
     <style>
         .filter-bar { background: #E3F2FD; padding: 18px 20px 10px 20px; border-radius: 12px; margin: 20px auto 30px auto; width: 98%; max-width: 1100px; box-shadow: 0 2px 10px rgba(25,118,210,0.07); }
         .filter-bar form { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: center; }

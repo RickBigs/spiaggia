@@ -23,17 +23,11 @@ while ($row = $result->fetch_assoc()) {
 ?>
 <!DOCTYPE html>
 <html lang="it">
-<\>
+<head>
     <meta charset="UTF-8">
     <title>Piantina Ombrelloni</title>
     <link rel="stylesheet" href="style.css">
-    <nav style="width:100%;background:#1976D2;padding:12px 0 10px 0;margin-bottom:30px;">
-        <div style="text-align:center;">
-            <a href="piantina_ombrelloni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Piantina Ombrelloni</a>
-            <a href="elenco_prenotazioni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Elenco Prenotazioni</a>
-            <a href="calendario.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Calendario</a>
-        </div>
-    </nav>
+    <?php include 'header.php'; ?>
 </head>
 <body>
     <h2>Piantina Ombrelloni - Data: <?php echo htmlspecialchars($data); ?></h2>

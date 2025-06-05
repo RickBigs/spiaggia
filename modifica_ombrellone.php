@@ -7,6 +7,8 @@ if ($conn->connect_error) {
 
 $id_ombrellone = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $data = isset($_GET['data']) ? $_GET['data'] : date('Y-m-d');
+$oggi = date('Y-m-d');
+$prenotazione_passata = ($data < $oggi);
 
 // Recupera dati ombrellone
 $sql = "SELECT * FROM ombrelloni WHERE id_ombrellone = $id_ombrellone";
@@ -101,6 +103,10 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
 <body>
     <div class="form-box">
         <h2>🏖️ Ombrellone n°<?php echo $ombrellone['id_ombrellone']; ?> (<?php echo $ombrellone['fila']; ?> fila)</h2>
+        <?php if ($prenotazione_passata): ?>
+            <div class="error-msg">Non è possibile inserire o modificare prenotazioni per date antecedenti a oggi (<?php echo date('d/m/Y'); ?>).</div>
+            <p style="text-align:center;margin-top:30px;"><a href="piantina_ombrelloni.php?data=<?php echo urlencode($oggi); ?>">Torna alla data odierna</a></p>
+        <?php else: ?>
         
         <?php if (strpos($msg, 'ERRORE') !== false): ?>
             <div class="error-msg"><?php echo htmlspecialchars($msg); ?></div>
@@ -119,10 +125,6 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
                     <span><strong>Dal:</strong> <?php echo htmlspecialchars($prenotazione['data_inizio']); ?></span>
                     <span><strong>Al:</strong> <?php echo htmlspecialchars($prenotazione['data_fine']); ?></span>
                 </div>
-            </div>
-        <?php else: ?>
-            <div style="background: linear-gradient(135deg, #E3F2FD, #BBDEFB); padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 25px; border: 2px solid #1976D2;">
-                <strong>🌊 Ombrellone libero per questa data</strong>
             </div>
         <?php endif; ?>
         
@@ -158,7 +160,7 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
                 <?php echo $prenotazione ? '✏️ Modifica Prenotazione' : '➕ Nuova Prenotazione'; ?>
             </button>
             
-            <?php if ($prenotazione): ?>
+            <?php if ($prenotazione && $prenotazione['data_fine'] >= date('Y-m-d')): ?>
                 <a href="modifica_ombrellone.php?id=
                 <?php echo $id_ombrellone; ?>&data=<?php echo urlencode($data); ?>&action=cancella" 
                    class="btn btn-danger" 
@@ -167,6 +169,7 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
                 </a>
             <?php endif; ?>
         </form>
+        <?php endif; ?>
         
         <p style="text-align: center; margin-top: 30px;">
             <a href="piantina_ombrelloni.php?data=<?php echo urlencode($data); ?>">← Torna alla piantina</a>

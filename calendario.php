@@ -53,6 +53,7 @@ $mesi_ita = [1=>'Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov
     <meta charset="UTF-8">
     <title>Calendario Ombrelloni</title>
     <link rel="stylesheet" href="style.css">
+    <?php include 'header.php'; ?>
     <style>
         .calendar-table { border-collapse: collapse; width: 99%; margin: 0 auto 40px auto; background: #fff; }
         .calendar-table th, .calendar-table td { border: 1px solid #bbb; padding: 4px 2px; text-align: center; font-size: 13px; }
@@ -71,13 +72,6 @@ $mesi_ita = [1=>'Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov
     </style>
 </head>
 <body>
-<nav style="width:100%;background:#1976D2;padding:12px 0 10px 0;margin-bottom:30px;">
-    <div style="text-align:center;">
-        <a href="piantina_ombrelloni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Piantina Ombrelloni</a>
-        <a href="elenco_prenotazioni.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:none;">Elenco Prenotazioni</a>
-        <a href="calendario.php" style="color:#fff;font-weight:bold;font-size:18px;margin:0 20px;text-decoration:underline;">Calendario</a>
-    </div>
-</nav>
 <h2>Calendario Ombrelloni - <?php echo $mesi_ita[$mese] . " $anno"; ?></h2>
 <div class="calendar-nav">
     <?php echo link_mese($prev_anno, $prev_mese, '← Mese precedente'); ?>
