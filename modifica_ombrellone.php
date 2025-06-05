@@ -142,7 +142,7 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
             </div>
             
             <label>📱 Cellulare:</label>
-            <input type="tel" name="cellulare" id="cellulare" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['cellulare']) : ''; ?>" placeholder="Es: 3331234567">
+            <input type="tel" name="cellulare" id="cellulare" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['cellulare']) : ''; ?>" placeholder="Es: 3331234567" required>
             
             <label>📧 Email:</label>
             <input type="email" name="email" id="email" value="<?php echo $prenotazione ? htmlspecialchars($prenotazione['email']) : ''; ?>" placeholder="Es: mario.rossi@email.com">
@@ -170,10 +170,9 @@ if (isset($_GET['msg'])) $msg = $_GET['msg'];
             <?php endif; ?>
         </form>
         <?php endif; ?>
-        
-        <p style="text-align: center; margin-top: 30px;">
-            <a href="piantina_ombrelloni.php?data=<?php echo urlencode($data); ?>">← Torna alla piantina</a>
-        </p>
+        <div style="text-align:center; margin-top: 30px;">
+            <a class="btn" href="calendario.php?data=<?php echo urlencode($data); ?>">← Torna al calendario</a>
+        </div>
     </div>
     
     <script>

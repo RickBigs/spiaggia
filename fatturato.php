@@ -24,15 +24,44 @@ $res = $conn->query($sql);
 $totale = 0;
 $righe = [];
 while($row = $res->fetch_assoc()) {
-    $prezzo = isset($row['prezzo']) ? floatval($row['prezzo']) : 0;
+    $prezzo = isset($row['prezzo']) ? $row['prezzo'] : '0.00';
     $giorni = 1;
     if (!empty($row['data_inizio']) && !empty($row['data_fine'])) {
         $giorni = (strtotime($row['data_fine']) - strtotime($row['data_inizio'])) / 86400 + 1;
         if ($giorni < 1) $giorni = 1;
     }
-    $prezzo = $prezzo * $giorni;
-    $totale += $prezzo;
-    $righe[] = $row + ['prezzo' => $prezzo, 'giorni' => $giorni, 'prezzo' => $prezzo];
+    // Calcolo importo come stringa per compatibilità DECIMAL
+    $importo = bcmul($prezzo, (string)$giorni, 2);
+    $importo = ($importo !== null && $importo !== '') ? $importo : '0.00';
+    $totale = bcadd($totale, $importo, 2);
+    $righe[] = $row + ['prezzo' => $prezzo, 'giorni' => $giorni, 'importo' => $importo];
+}
+
+$stat_ombrelloni = [];
+$stat_tipologia = [
+    'Standard' => ['count' => 0, 'importo' => 0],
+    'Superior' => ['count' => 0, 'importo' => 0],
+    'Premium' => ['count' => 0, 'importo' => 0],
+];
+
+// Recupera anche la tipologia per le statistiche
+$sql_stat = "SELECT o.id_ombrellone, o.tipologia, o.prezzo, COUNT(p.id_prenotazioni) as num_pren, 
+    SUM((DATEDIFF(p.data_fine, p.data_inizio)+1)*o.prezzo) as incasso
+FROM ombrelloni o
+LEFT JOIN prenotazioni p ON o.id_ombrellone = p.id_ombrellone";
+if ($where) $sql_stat .= " AND ".implode(' AND ', $where);
+$sql_stat .= " GROUP BY o.id_ombrellone, o.tipologia, o.prezzo ORDER BY incasso DESC, num_pren DESC";
+$sql_stat = str_replace('WHERE  AND', 'WHERE', $sql_stat); // fix doppio AND
+$res_stat = $conn->query($sql_stat);
+while($row = $res_stat->fetch_assoc()) {
+    // $row['prezzo'] e $row['incasso'] sono DECIMAL dal db
+    $row['incasso'] = ($row['incasso'] !== null && $row['incasso'] !== '') ? $row['incasso'] : '0.00';
+    $stat_ombrelloni[] = $row;
+    $tipo = $row['tipologia'];
+    if (isset($stat_tipologia[$tipo])) {
+        $stat_tipologia[$tipo]['count'] += $row['num_pren'];
+        $stat_tipologia[$tipo]['importo'] = bcadd($stat_tipologia[$tipo]['importo'], $row['incasso'], 2);
+    }
 }
 
 include 'header.php';
@@ -67,7 +96,42 @@ include 'header.php';
         <a href="fatturato.php" style="margin-left:10px;color:#1976D2;font-weight:bold;text-decoration:underline;">Reset</a>
     </form>
 </div>
-<table class="fatturato-table">
+
+<h3 style="text-align:center;margin-top:30px;">Statistiche Ombrelloni più richiesti e più venduti</h3>
+<table class="fatturato-table" style="margin-bottom:20px;">
+    <tr>
+        <th>Ombrellone</th>
+        <th>Tipologia</th>
+        <th>Prenotazioni</th>
+        <th>Fatturato (€)</th>
+    </tr>
+    <?php foreach($stat_ombrelloni as $row): ?>
+    <tr>
+        <td><?php echo $row['id_ombrellone']; ?></td>
+        <td><?php echo $row['tipologia']; ?></td>
+        <td><?php echo $row['num_pren']; ?></td>
+        <td><?php echo number_format($row['incasso'] !== null ? $row['incasso'] : 0, 2, ',', '.'); ?></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+
+<h3 style="text-align:center;margin-top:30px;">Riepilogo per Tipologia</h3>
+<table class="fatturato-table" style="margin-bottom:40px;">
+    <tr>
+        <th>Tipologia</th>
+        <th>Prenotazioni totali</th>
+        <th>Fatturato totale (€)</th>
+    </tr>
+    <?php foreach($stat_tipologia as $tipo => $stat): ?>
+    <tr>
+        <td><?php echo $tipo; ?></td>
+        <td><?php echo $stat['count']; ?></td>
+        <td><?php echo number_format($stat['importo'] !== null ? $stat['importo'] : 0, 2, ',', '.'); ?></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+
+<table class="fatturato-table" id="tabella-fatturato">
     <tr>
         <th>#</th>
         <th>Ombrellone</th>
@@ -77,22 +141,34 @@ include 'header.php';
         <th>Giorni</th>
         <th>Importo (€)</th>
     </tr>
-    <?php foreach($righe as $row): ?>
-    <tr>
+    <?php $max = 5; $count = 0; foreach($righe as $row): $count++; ?>
+    <tr class="fatturato-row" <?php if($count > $max) echo 'style="display:none"'; ?>>
         <td><?php echo $row['id_prenotazioni']; ?></td>
         <td><?php echo htmlspecialchars($row['id_ombrellone']); ?></td>
         <td><?php echo htmlspecialchars($row['nome'] . ' ' . $row['cognome']); ?></td>
         <td><?php echo htmlspecialchars($row['data_inizio']); ?></td>
         <td><?php echo htmlspecialchars($row['data_fine']); ?></td>
         <td><?php echo $row['giorni']; ?></td>
-        <td><?php echo number_format($row['prezzo'], 2, ',', '.'); ?></td>
+        <td><?php echo number_format($row['importo'] !== null ? $row['importo'] : 0, 2, ',', '.'); ?></td>
     </tr>
     <?php endforeach; ?>
     <tr class="totale-row">
         <td colspan="6">Totale Fatturato</td>
-        <td><?php echo number_format($totale, 2, ',', '.'); ?> €</td>
+        <td><?php echo number_format($totale !== null ? $totale : 0, 2, ',', '.'); ?> €</td>
     </tr>
 </table>
+<?php if(count($righe) > $max): ?>
+<div style="text-align:center;margin-bottom:30px;">
+    <button id="vedi-di-piu" class="btn" style="width:auto;display:inline-block;">Vedi di più</button>
+</div>
+<script>
+document.getElementById('vedi-di-piu').onclick = function() {
+    var rows = document.querySelectorAll('.fatturato-row');
+    for(let i=0; i<rows.length; i++) rows[i].style.display = '';
+    this.style.display = 'none';
+};
+</script>
+<?php endif; ?>
 <div class="mare-striscia"></div>
 </body>
 </html>
