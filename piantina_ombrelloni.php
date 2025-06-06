@@ -128,6 +128,17 @@ function modificaOmbrellone(id) {
     window.location.href = 'modifica_ombrellone.php?id=' + id + '&data=<?php echo urlencode($data); ?>';
 }
 
+function showTooltip(event, content) {
+    const tooltip = document.querySelector('.tooltip');
+    tooltip.innerHTML = content;
+    tooltip.style.display = 'block';
+    tooltip.style.left = event.pageX + 'px';
+    tooltip.style.top = (event.pageY - 60) + 'px';
+}
+
+function hideTooltip() {
+    document.querySelector('.tooltip').style.display = 'none';
+}
 </script>
 
 <footer>

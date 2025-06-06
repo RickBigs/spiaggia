@@ -54,22 +54,26 @@ $mesi_ita = [1=>'Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov
     <title>Calendario Ombrelloni</title>
     <link rel="stylesheet" href="style.css">
     <?php include 'header.php'; ?>
-    <style>
-        .calendar-table { border-collapse: collapse; width: 99%; margin: 0 auto 40px auto; background: #fff; }
-        .calendar-table th, .calendar-table td { border: 1px solid #bbb; padding: 4px 2px; text-align: center; font-size: 13px; }
-        .calendar-table th { background: #1976D2; color: #fff; position: sticky; top: 0; z-index: 2; }
-        .calendar-table td { min-width: 32px; height: 32px; position: relative; }
-        .cell-libero { background: linear-gradient(135deg, #C8E6C9 60%, #A5D6A7 100%); cursor: pointer; }
-        .cell-prenotato { background: linear-gradient(135deg, #FFCDD2 60%, #FF8A80 100%); cursor: pointer; }
-        .cell-libero:hover, .cell-prenotato:hover { outline: 2px solid #1976D2; z-index: 10; }
-        .calendar-table .ombrellone-label { background: #E3F2FD; color: #1976D2; font-weight: bold; position: sticky; left: 0; z-index: 1; }
-        .calendar-tooltip { display:none; position:absolute; left:50%; top:110%; transform:translateX(-50%); background:#fff; border:2px solid #1976D2; border-radius:8px; padding:10px; min-width:180px; box-shadow:0 4px 16px rgba(0,0,0,0.13); color:#333; font-size:13px; z-index:100; }
-        .calendar-table td:hover .calendar-tooltip { display:block; }
-        .calendar-nav { text-align:center; margin: 25px 0 20px 0; }
-        .calendar-nav a { color:#1976D2; font-size:18px; }
-        .calendar-nav span { font-size:20px; font-weight:bold; color:#0D47A1; margin:0 18px; }
-        @media (max-width:900px) { .calendar-table { font-size:10px; } .calendar-table th, .calendar-table td { padding:2px 1px; min-width:18px; } }
-    </style>
+
+<style>
+    .calendar-tooltip { 
+    display:none; 
+    position: absolute; /* Ripristinato ad absolute */
+    left:50%; 
+    top:110%; 
+    transform:translateX(-50%); 
+    background:#fff; 
+    border:2px solid #1976D2; 
+    border-radius:8px; 
+    padding:10px; 
+    min-width:180px; 
+    box-shadow:0 4px 16px rgba(0,0,0,0.13); 
+    color:#333; 
+    font-size:13px; 
+    z-index: 2147483647; /* Z-index alto */
+    pointer-events: none;
+}
+</style>
 </head>
 <body>
 <h2>Calendario Ombrelloni - <?php echo $mesi_ita[$mese] . " $anno"; ?></h2>
@@ -108,6 +112,8 @@ $mesi_ita = [1=>'Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov
     <?php endforeach; ?>
 </table>
 <p style="text-align:center;"><a href="piantina_ombrelloni.php" class="btn">Torna alla piantina</a></p>
+<br>
+<br>
 <div class="mare-striscia"></div>
 </body>
 </html>

@@ -1,6 +1,36 @@
 /* Reset e stili globali */
 * { box-sizing: border-box; }
 
+        .calendar-table { border-collapse: collapse; width: 99%; margin: 0 auto 40px auto; background: #fff; }
+        .calendar-table th, .calendar-table td { border: 1px solid #bbb; padding: 4px 2px; text-align: center; font-size: 13px; }
+        .calendar-table th { background: #1976D2; color: #fff; position: sticky; top: 0; z-index: 2; }
+        .calendar-table td { min-width: 32px; height: 32px; position: relative; }
+        .cell-libero { background: linear-gradient(135deg, #C8E6C9 60%, #A5D6A7 100%); cursor: pointer; }
+        .cell-prenotato { background: linear-gradient(135deg, #FFCDD2 60%, #FF8A80 100%); cursor: pointer; }
+        .cell-libero:hover, .cell-prenotato:hover { outline: 2px solid #1976D2; z-index: 10; }
+        .calendar-table .ombrellone-label { background: #E3F2FD; color: #1976D2; font-weight: bold; position: sticky; left: 0; z-index: 1; }
+.calendar-tooltip { 
+    display:none; 
+    position: fixed; /* Cambiato da absolute a fixed */
+    left:50%; 
+    top:110%; 
+    transform:translateX(-50%); 
+    background:#fff; 
+    border:2px solid #1976D2; 
+    border-radius:8px; 
+    padding:10px; 
+    min-width:180px; 
+    box-shadow:0 4px 16px rgba(0,0,0,0.13); 
+    color:#333; 
+    font-size:13px; 
+    z-index: 2147483647; /* Valore massimo */
+    pointer-events: none; /* Evita interferenze */
+}        .calendar-table td:hover .calendar-tooltip { display:block; }
+        .calendar-nav { text-align:center; margin: 25px 0 20px 0; }
+        .calendar-nav a { color:#1976D2; font-size:18px; }
+        .calendar-nav span { font-size:20px; font-weight:bold; color:#0D47A1; margin:0 18px; }
+        @media (max-width:900px) { .calendar-table { font-size:10px; } .calendar-table th, .calendar-table td { padding:2px 1px; min-width:18px; } }
+    
 body {
     background: #FFE4B5;
     min-height: 100vh;
@@ -154,18 +184,18 @@ h2 {
 
 /* Ombrellone container */
 .ombrellone {
-    position: relative;
+    position: relative; /* Importante per il posizionamento del tooltip */
     width: 110px;
     height: 130px;
     cursor: pointer;
     transition: all 0.2s;
     filter: drop-shadow(0 6px 12px rgba(0,0,0,0.13));
-    z-index: 1; /* <-- AGGIUNTO */
+    z-index: 1;
 }
 
 .ombrellone:hover {
     transform: translateY(-8px) scale(1.08);
-    z-index: 9999; /* <-- PIÙ ALTO */
+    z-index: 9999; /* Alto ma sotto il tooltip */
 }
 /* Parte superiore dell'ombrellone (telo) */
 .ombrellone::before {
@@ -221,18 +251,18 @@ h2 {
     border: 2px solid #1976D2;
     letter-spacing: 1px;
 }
-
 /* Tooltip migliorato */
+
 .tooltip {
     display: none;
-    position:relative;
+    position: absolute; /* Ripristinato ad absolute */
     top: 120px;
     left: 50%;
     transform: translateX(-50%);
     background: #fff;
     border: 2px solid #1976D2;
     padding: 14px;
-    z-index: 99999999;
+    z-index: 2147483647; /* Mantieni z-index alto */
     min-width: 200px;
     border-radius: 10px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.13);
@@ -240,7 +270,9 @@ h2 {
     text-align: left;
     font-size: 14px;
     line-height: 1.6;
+    pointer-events: none; /* Mantieni questo */
 }
+
 
 .tooltip::before {
     content: '';
@@ -255,10 +287,14 @@ h2 {
     border-bottom: 12px solid #1976D2;
 }
 
-.tooltip strong { color: #1976D2; font-size: 16px; }
-
-.ombrellone:hover .tooltip { display: block; }
-
+.tooltip strong { 
+    color: #1976D2; 
+    font-size: 16px; 
+}
+.ombrellone:hover {
+    transform: translateY(-8px) scale(1.08);
+    z-index: 9999; /* Mantieni alto ma sotto il tooltip */
+}
 /* Mare - Striscia fissa in basso con onde */
 .mare-striscia {
     left: 0;
