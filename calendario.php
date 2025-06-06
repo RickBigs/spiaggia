@@ -56,23 +56,7 @@ $mesi_ita = [1=>'Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov
     <?php include 'header.php'; ?>
 
 <style>
-    .calendar-tooltip { 
-    display:none; 
-    position: absolute; /* Ripristinato ad absolute */
-    left:50%; 
-    top:110%; 
-    transform:translateX(-50%); 
-    background:#fff; 
-    border:2px solid #1976D2; 
-    border-radius:8px; 
-    padding:10px; 
-    min-width:180px; 
-    box-shadow:0 4px 16px rgba(0,0,0,0.13); 
-    color:#333; 
-    font-size:13px; 
-    z-index: 2147483647; /* Z-index alto */
-    pointer-events: none;
-}
+
 </style>
 </head>
 <body>

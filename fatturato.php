@@ -72,19 +72,7 @@ include 'header.php';
     <meta charset="UTF-8">
     <title>Fatturato Prenotazioni</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .fatturato-table { width:98%; margin:30px auto; border-collapse:collapse; background:#fff; }
-        .fatturato-table th, .fatturato-table td { padding:10px 8px; border:1px solid #bbb; text-align:center; }
-        .fatturato-table th { background:#1976D2; color:#fff; }
-        .fatturato-table tr:nth-child(even) { background:#f5f5f5; }
-        .totale-row { font-weight:bold; background:#E3F2FD; color:#0D47A1; font-size:1.2em; }
-        .filter-bar { background: #E3F2FD; padding: 18px 20px 10px 20px; border-radius: 12px; margin: 20px auto 30px auto; width: 98%; max-width: 1100px; box-shadow: 0 2px 10px rgba(25,118,210,0.07); }
-        .filter-bar form { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: center; }
-        .filter-bar label { font-weight: bold; color: #1976D2; margin-right: 6px; }
-        .filter-bar input { padding: 7px 10px; border: 1.5px solid #1976D2; border-radius: 6px; font-size: 15px; }
-        .filter-bar button { padding: 7px 18px; background: #1976D2; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-left: 10px; }
-        .filter-bar button:hover { background: #1565C0; }
-    </style>
+
 </head>
 <body>
 <h2>Fatturato Prenotazioni</h2>

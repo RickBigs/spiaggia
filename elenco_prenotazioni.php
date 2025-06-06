@@ -45,21 +45,7 @@ $ombrelloni_list = $conn->query("SELECT id_ombrellone FROM ombrelloni ORDER BY i
     <title>Elenco Prenotazioni</title>
     <link rel="stylesheet" href="style.css">
     <?php include 'header.php'; ?>
-    <style>
-        .filter-bar { background: #E3F2FD; padding: 18px 20px 10px 20px; border-radius: 12px; margin: 20px auto 30px auto; width: 98%; max-width: 1100px; box-shadow: 0 2px 10px rgba(25,118,210,0.07); }
-        .filter-bar form { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: center; }
-        .filter-bar label { font-weight: bold; color: #1976D2; margin-right: 6px; }
-        .filter-bar input, .filter-bar select { padding: 7px 10px; border: 1.5px solid #1976D2; border-radius: 6px; font-size: 15px; }
-        .filter-bar button { padding: 7px 18px; background: #1976D2; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-left: 10px; }
-        .filter-bar button:hover { background: #1565C0; }
-        table { width: 98%; margin: 30px auto; border-collapse: collapse; background: #fff; }
-        th, td { padding: 10px 8px; border: 1px solid #bbb; text-align: center; }
-        th { background: #1976D2; color: #fff; }
-        tr:nth-child(even) { background: #f5f5f5; }
-        .btn-small { padding: 4px 12px; border-radius: 6px; background: #1976D2; color: #fff; border: none; cursor: pointer; font-size: 14px; }
-        .btn-small:hover { background: #1565C0; }
-        h2 { text-align: center; margin-top: 30px; }
-    </style>
+ 
 </head>
 <body>
     <h2>Elenco Prenotazioni</h2>
