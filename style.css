@@ -291,6 +291,12 @@ h2 {
     color: #1976D2; 
     font-size: 16px; 
 }
+
+/* Show tooltip on hover */
+.ombrellone:hover .tooltip {
+    display: block !important;
+}
+
 .ombrellone:hover {
     transform: translateY(-8px) scale(1.08);
     z-index: 9999; /* Mantieni alto ma sotto il tooltip */
